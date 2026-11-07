@@ -1,0 +1,196 @@
+{
+  "11": {
+    "inputs": {
+      "unet_name": "qwen-image-Q6_K.gguf"
+    },
+    "class_type": "UnetLoaderGGUF",
+    "_meta": {
+      "title": "Unet Loader (GGUF)"
+    }
+  },
+  "12": {
+    "inputs": {
+      "clip_name": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "13": {
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "14": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "Qwen-Image-Lightning-8steps-V1.1-bf16.safetensors",
+        "strength": 1
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "11",
+        0
+      ],
+      "clip": [
+        "12",
+        0
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Power Lora Loader (rgthree)"
+    }
+  },
+  "15": {
+    "inputs": {
+      "text": "A surreal, high‑fashion product photography scene featuring an opulent luxury clock as the central focus, displayed on a floating slab of polished black marble suspended in a void. The clock’s design is bold and sculptural — a fusion of Art Deco geometry and futuristic minimalism, crafted from brushed gold and deep onyx, with intricate engravings along the bezel. The clock face is made of luminous mother‑of‑pearl, with sleek, elongated hands in polished rose gold. In the very center of the clock face, replacing the usual brand mark, the word PREMIUM appears in elegant, embossed gold lettering, glowing subtly as if illuminated from within the dial. Surrounding the clock is an abstract, dreamlike environment — shards of fractured crystal floating in mid‑air, beams of warm golden light cutting through a soft mist, and delicate metallic ribbons twisting gracefully in zero gravity. The lighting is dramatic and cinematic, with deep shadows and brilliant highlights emphasizing the craftsmanship. The color palette blends molten gold, pearl white, and obsidian black, with subtle iridescent reflections. Ultra‑realistic 8K resolution, shallow depth of field, editorial composition — a perfect fusion of luxury branding and avant‑garde art photography.",
+      "clip": [
+        "14",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "16": {
+    "inputs": {
+      "megapixel": "1.0",
+      "aspect_ratio": "1:1 (Perfect Square)",
+      "divisible_by": "64",
+      "custom_ratio": false,
+      "custom_aspect_ratio": "1:1"
+    },
+    "class_type": "FluxResolutionNode",
+    "_meta": {
+      "title": "Flux Resolution Calc"
+    }
+  },
+  "17": {
+    "inputs": {
+      "width": [
+        "16",
+        0
+      ],
+      "height": [
+        "16",
+        1
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptySD3LatentImage",
+    "_meta": {
+      "title": "EmptySD3LatentImage"
+    }
+  },
+  "18": {
+    "inputs": {
+      "shift": 3.0000000000000004,
+      "model": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingAuraFlow",
+    "_meta": {
+      "title": "ModelSamplingAuraFlow"
+    }
+  },
+  "19": {
+    "inputs": {
+      "seed": 942856162418012,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "18",
+        0
+      ],
+      "positive": [
+        "15",
+        0
+      ],
+      "negative": [
+        "20",
+        0
+      ],
+      "latent_image": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "20": {
+    "inputs": {
+      "conditioning": [
+        "15",
+        0
+      ]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "ConditioningZeroOut"
+    }
+  },
+  "21": {
+    "inputs": {
+      "samples": [
+        "19",
+        0
+      ],
+      "vae": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "22": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "25": {
+    "inputs": {
+      "preview": "1024 x 1024",
+      "source": [
+        "16",
+        2
+      ]
+    },
+    "class_type": "PreviewAny",
+    "_meta": {
+      "title": "Preview Any"
+    }
+  }
+}
