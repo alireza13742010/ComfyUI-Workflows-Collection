@@ -1,0 +1,122 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "ace_step_v1_3.5b.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "3": {
+    "inputs": {
+      "shift": 4.000000000000001,
+      "model": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "4": {
+    "inputs": {
+      "seed": 53285895065710,
+      "steps": 50,
+      "cfg": 4,
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "3",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "8",
+        0
+      ],
+      "latent_image": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "6": {
+    "inputs": {
+      "tags": "rock, hip - hop, orchestral, bass, drums, electric guitar, piano, synthesizer, violin, viola, cello, fast, energetic, motivational, inspirational, empowering",
+      "lyrics": "[Intro – Spoken]**  \\n*\\\"The streets whisper, their echoes never fade.  \\nEvery step I take leaves a mark—this ain't just a game.\\\"*  \\n\\n### **[Hook/Chorus]**  \\nBorn in the chaos, I weather the storm,  \\nRising from ashes where warriors are born.  \\nChains couldn't hold me, the system’s a maze,  \\nI rewrite the rules, set the city ablaze!  \\n\\n### **[Verse 1]**  \\nCold nights, empty pockets, dreams laced with fight,  \\nEvery loss made me sharper, cut deep like a knife.  \\nThey said I wouldn’t make it, now they watch in despair,  \\nFrom the curb to the throne, took the pain, made it rare.  \\nEvery siren’s a melody, every alley holds a tale,  \\nRose from the shadows, left my name on the trail.  \\nStreetlights flicker like warnings in the haze,  \\nBut I move like a phantom, unfazed by the blaze.  \\n\\n### **[Hook/Chorus]**  \\nBorn in the chaos, I weather the storm,  \\nRising from ashes where warriors are born.  \\nChains couldn't hold me, the system’s a maze,  \\nI rewrite the rules, set the city ablaze!  \\n\\n### **[Verse 2]**  \\nBarbed wire fences couldn't lock in my mind,  \\nEvery cage they designed, I left broken behind.  \\nThey want control, but I’m destined to roam,  \\nWhere the lost find their voice, where the heart sets the tone.  \\nSteel and concrete, where the lessons run deep,  \\nEvery crack in the pavement tells a story of heat.  \\nBut I rise, undefeated, like a king with no throne,  \\nWriting scripts in the struggle, my legacy’s stone.  \\n\\n### **[Bridge]**  \\nFeel the rhythm of the underground roar,  \\nEvery wound tells a story of the battles before.  \\nBlood, sweat, and echoes fill the cold midnight,  \\nBut we move with the fire—unshaken, upright.  \\n\\n### **[Verse 3]**  \\nNo regrets, no retreat, this game has no pause,  \\nEvery step that I take is a win for the lost.  \\nI took lessons from hustlers, wisdom from pain,  \\nNow the echoes of struggle carve power in my name.  \\nThey built walls, but I walk through the cracks,  \\nTurned dirt into gold, never looked back.  \\nThrough the struggle we rise, through the fire we claim,  \\nThis is more than just music—it's life in the frame.  \\n\\n### **[Hook/Chorus – Reprise]**  \\nBorn in the chaos, I weather the storm,  \\nRising from ashes where warriors are born.  \\nChains couldn't hold me, the system’s a maze,  \\nI rewrite the rules, set the city ablaze!  \\n\\n### **[Outro – Spoken]**  \\n*\\\"The scars, the struggle, the grind—it’s all part of the rhythm.  \\nWe never break, we never fold. We rise.",
+      "lyrics_strength": 1,
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "TextEncodeAceStepAudio",
+    "_meta": {
+      "title": "TextEncodeAceStepAudio"
+    }
+  },
+  "7": {
+    "inputs": {
+      "seconds": 120,
+      "batch_size": 1
+    },
+    "class_type": "EmptyAceStepLatentAudio",
+    "_meta": {
+      "title": "EmptyAceStepLatentAudio"
+    }
+  },
+  "8": {
+    "inputs": {
+      "conditioning": [
+        "6",
+        0
+      ]
+    },
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "ConditioningZeroOut"
+    }
+  },
+  "9": {
+    "inputs": {
+      "samples": [
+        "4",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAEDecodeAudio"
+    }
+  },
+  "10": {
+    "inputs": {
+      "filename_prefix": "audio/ComfyUI",
+      "quality": "128k",
+      "audioUI": "",
+      "audio": [
+        "9",
+        0
+      ]
+    },
+    "class_type": "SaveAudioMP3",
+    "_meta": {
+      "title": "Save Audio (MP3)"
+    }
+  }
+}
